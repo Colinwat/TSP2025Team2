@@ -7,11 +7,17 @@ import java.util.Scanner;
  * Made beacuse I felt like it
  */
 
-// Minesweeper is 18 x 14
+/**
+ * This program works for playing minesweeper mostly, but there are some bugs and unfinished features.
+ * One feature I want to add is having a custom board size with a custom number of mines.
+ * One bug I know of is that the revealedCells varaible is incremented twice sometimes when revealing tiles, causing the game to end early.
+ * I probably won't be updating this program anymore though.
+ */
 
 //TODO: add win detection (test)
 
 public class Minesweeper{
+    // A standard board size is 18 x 14
     final static int WIDTH = 18;
     final static int LENGTH = 14;
     final static int MINES = 40;
