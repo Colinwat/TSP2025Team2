@@ -1,88 +1,85 @@
-/**
- * This class implements a custom object for use with playing minesweeper.
- */
+import java.awt.*;
+import javax.swing.*;
 
-public class Cell {
-    // Instance variables
+public class Cell extends JButton {
     private int hint;
     private boolean mine;
     private boolean flag;
     private boolean revealed;
 
-    /**
-     * The constructor for a new cell
-     */
-    public Cell(){
+    public Cell() {
         hint = 0;
         mine = false;
         flag = false;
         revealed = false;
+
+        setFont(new Font("Arial", Font.BOLD, 14));
+        setFocusPainted(false);
+        setBackground(Color.LIGHT_GRAY);
     }
 
-    /**
-     * Returns the cell's mine status
-     * @return True if the cell is a mine, false otherwise
-     */
-    public boolean isMine(){
-        return this.mine;
+    public boolean isMine() {
+        return mine;
     }
 
-    /**
-     * Sets a cell to a mine
-     */
+     public void setFlagged(boolean flag) {
+        this.flag = flag;
+    }
+ public void toggleFlag() {
+        if (isRevealed()) return;
+
+        flag = !flag;
+        setText(flag ? "F" : "");
+    }
+
     public void setMine() {
-        this.mine = true;
+        mine = true;
     }
 
-    /**
-     * Returns the cell's hint value
-     * @return The number of mines adjacent to the cell
-     */
-    public int getHint(){
-        return this.hint;
+    public int getHint() {
+        return hint;
     }
 
-    /**
-     * Increments a cell's hint value
-     */
-    public void addHint(){
-        this.hint += 1;
+    public void setHint(int hint) {  // ✅ FIX: Added this method
+        this.hint = hint;
     }
 
-    /**
-     * Returns the cell's flag status
-     * @return True if the cell is flagged, false otherwise
-     */
-    public boolean isFlag(){
-        return this.flag;
+    public boolean isFlagged() {
+        return flag;
     }
 
-    /**
-     * Swaps the cell's flag status
-     */
-    public void swapFlag(){
-        this.flag = !this.flag;
+    public void swapFlag() {
+        if (!revealed) {
+            flag = !flag;
+            setText(flag ? "F" : "");
+        }
     }
 
-    /**
-     * Returns the cell's revealed status
-     * @return True if the cell is revealed, false otherwise
-     */
-    public boolean isRevealed(){
-        return this.revealed;
+    public boolean isRevealed() {
+        return revealed;
     }
 
-    /**
-     * Sets the cell to be revealed
-     */
     public void revealCell() {
-        this.revealed = true;
+        if (!revealed) {
+            revealed = true;
+            setEnabled(false);
+            setBackground(Color.WHITE);
+
+            if (mine) {
+                setText("💣");
+                setForeground(Color.RED);
+            } else if (hint > 0) {
+                setText(String.valueOf(hint));
+                setForeground(Color.BLUE);
+            }
+        }
     }
 
-    /**
-     * Sets the cell to be hidden. Used for debugging
-     */
-    public void hideCell(){
-        this.revealed = false;
+    public void hideCell() {
+        revealed = false;
+        flag = false;
+        setText("");
+        setEnabled(true);
+        setBackground(Color.LIGHT_GRAY);
     }
 }
