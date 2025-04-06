@@ -8,15 +8,18 @@ import java.util.Scanner;
  */
 
 /**
- * This program works for playing minesweeper mostly, but there are some bugs and unfinished features.
- * One feature I want to add is having a custom board size with a custom number of mines.
- * One bug I know of is that the revealedCells varaible is incremented twice sometimes when revealing tiles, causing the game to end early.
+ * This program works for playing minesweeper mostly, but there are some bugs
+ * and unfinished features.
+ * One feature I want to add is having a custom board size with a custom number
+ * of mines.
+ * One bug I know of is that the revealedCells varaible is incremented twice
+ * sometimes when revealing tiles, causing the game to end early.
  * I probably won't be updating this program anymore though.
  */
 
-//TODO: add win detection (test)
+// TODO: add win detection (test)
 
-public class Minesweeper{
+public class Minesweeper {
     // A standard board size is 18 x 14
     final static int WIDTH = 18;
     final static int LENGTH = 14;
@@ -24,10 +27,13 @@ public class Minesweeper{
 
     public static void main(String[] args) {
         // Printing game instructions
-        System.out.println("HOW TO PLAY: Type in the command (\"flg\", \"dig\", \"chd\"), then the x and y coordinates of the tile");
+        System.out.println(
+                "HOW TO PLAY: Type in the command (\"flg\", \"dig\", \"chd\"), then the x and y coordinates of the tile");
         System.out.println("dig reveals the selected tile, flg flags or unflags the selected tile.");
-        System.out.println("chd (chord) command will reveal all cells adjacent to the selected one, as long as the cell has a revealed " +
-                "number and has that many flags adjacent");
+        System.out.println(
+                "chd (chord) command will reveal all cells adjacent to the selected one, as long as the cell has a revealed "
+                        +
+                        "number and has that many flags adjacent");
         System.out.println("Example: \"dig 3 5\" will reveal the tile on (3, 5)");
         System.out.print("\nSTARTING GAME\n\n");
 
@@ -42,15 +48,18 @@ public class Minesweeper{
         System.out.printf("%d out of %d cells revealed\n", revealedCells, WIDTH * LENGTH);
 
         // Running the game, endless loop checks for user input
-        while(true){
+        while (true) {
             // Read and process the command
             String input = scan.next();
 
-            if(input.compareTo("help") == 0){
-                System.out.println("HOW TO PLAY: Type in the command (\"flg\", \"dig\", \"chd\"), then the x and y coordinates of the tile");
+            if (input.compareTo("help") == 0) {
+                System.out.println(
+                        "HOW TO PLAY: Type in the command (\"flg\", \"dig\", \"chd\"), then the x and y coordinates of the tile");
                 System.out.println("dig reveals the selected tile, flg flags or unflags the selected tile.");
-                System.out.println("chd (chord) command will reveal all cells adjacent to the selected one, as long as the cell has a revealed " +
-                        "number and has that many flags adjacent");
+                System.out.println(
+                        "chd (chord) command will reveal all cells adjacent to the selected one, as long as the cell has a revealed "
+                                +
+                                "number and has that many flags adjacent");
                 System.out.println("Example: \"dig 3 5\" will reveal the tile on (3, 5)");
                 scan.nextLine(); // Clear the scanner buffer
                 continue;
@@ -58,18 +67,17 @@ public class Minesweeper{
 
             int x = scan.nextInt();
             int y = scan.nextInt();
-            if(x > WIDTH - 1 || x < 0 || y > LENGTH - 1 || y < 0){
+            if (x > WIDTH - 1 || x < 0 || y > LENGTH - 1 || y < 0) {
                 System.out.println("Error: X or Y coordinate out of bounds");
                 continue;
             }
 
             // Dig command
-            if(input.compareTo("dig") == 0){
-                if(field[x][y].isFlag()){
+            if (input.compareTo("dig") == 0) {
+                if (field[x][y].isFlag()) {
                     System.out.println("Cell is flagged");
                     continue;
-                }
-                else if(field[x][y].isMine()){
+                } else if (field[x][y].isMine()) {
                     System.out.println("You hit a mine, Game Over");
                     revealField(field);
                     break;
@@ -78,82 +86,79 @@ public class Minesweeper{
                 field[x][y].revealCell();
                 revealedCells++;
 
-                if(field[x][y].getHint() == 0){
+                if (field[x][y].getHint() == 0) {
                     revealedCells += revealAdjacent(field, x, y, 0);
                 }
             }
 
             // Flag command
-            else if(input.compareTo("flg") == 0){
-                if(field[x][y].isRevealed()){
+            else if (input.compareTo("flg") == 0) {
+                if (field[x][y].isRevealed()) {
                     System.out.println("Cell is already revealed");
                     continue;
-                }
-                else{
+                } else {
                     field[x][y].swapFlag();
-                    if(field[x][y].isFlag()){
+                    if (field[x][y].isFlag()) {
                         numFlags++;
-                    }
-                    else{
+                    } else {
                         numFlags--;
                     }
                 }
             }
 
             // Chord command
-            else if(input.compareTo("chd") == 0){
-                if(field[x][y].isFlag()){
+            else if (input.compareTo("chd") == 0) {
+                if (field[x][y].isFlag()) {
                     System.out.println("Cell is flagged");
                     continue;
-                }
-                else if(!field[x][y].isRevealed()){
+                } else if (!field[x][y].isRevealed()) {
                     System.out.println("Cell is not revealed");
                     continue;
                 }
 
                 int numAdjacentFlags = 0;
-                // Access each adjacent cell if they exist, then add to the flag count if that cell is flagged
-                if((x - 1 >= 0) && (y - 1 >= 0) && field[x - 1][y - 1].isFlag()){
+                // Access each adjacent cell if they exist, then add to the flag count if that
+                // cell is flagged
+                if ((x - 1 >= 0) && (y - 1 >= 0) && field[x - 1][y - 1].isFlag()) {
                     numAdjacentFlags++; // Bottom left
                 }
-                if((y - 1 >= 0) && field[x][y - 1].isFlag()){
+                if ((y - 1 >= 0) && field[x][y - 1].isFlag()) {
                     numAdjacentFlags++; // Bottom middle
                 }
-                if((x + 1 < WIDTH) && (y - 1 >= 0) && field[x + 1][y - 1].isFlag()){
+                if ((x + 1 < WIDTH) && (y - 1 >= 0) && field[x + 1][y - 1].isFlag()) {
                     numAdjacentFlags++; // Bottom right
                 }
-                if((x - 1 >= 0) && field[x - 1][y].isFlag()){
+                if ((x - 1 >= 0) && field[x - 1][y].isFlag()) {
                     numAdjacentFlags++; // Middle left
                 }
-                if((x + 1 < WIDTH) && field[x + 1][y].isFlag()){
+                if ((x + 1 < WIDTH) && field[x + 1][y].isFlag()) {
                     numAdjacentFlags++; // Middle right
                 }
-                if((x - 1 >= 0) && (y + 1 < LENGTH) && field[x - 1][y + 1].isFlag()){
+                if ((x - 1 >= 0) && (y + 1 < LENGTH) && field[x - 1][y + 1].isFlag()) {
                     numAdjacentFlags++; // Top left
                 }
-                if((y + 1 < LENGTH) && field[x][y + 1].isFlag()){
+                if ((y + 1 < LENGTH) && field[x][y + 1].isFlag()) {
                     numAdjacentFlags++; // Top middle
                 }
-                if((x + 1 < WIDTH) && (y + 1 < LENGTH) && field[x + 1][y + 1].isFlag()){
+                if ((x + 1 < WIDTH) && (y + 1 < LENGTH) && field[x + 1][y + 1].isFlag()) {
                     numAdjacentFlags++; // Top right
                 }
 
-                if(numAdjacentFlags == field[x][y].getHint()){
+                if (numAdjacentFlags == field[x][y].getHint()) {
                     revealedCells += revealAdjacent(field, x, y, 0);
-                }
-                else if(numAdjacentFlags < field[x][y].getHint()){
+                } else if (numAdjacentFlags < field[x][y].getHint()) {
                     System.out.println("Not enough flags nearby");
                     continue;
-                }
-                else{
+                } else {
                     System.out.println("Too many flags nearby");
                     continue;
                 }
             }
 
             // Command not recognized
-            else{
-                System.out.println("Error: Command not recognized. Commands are in the form [command] [x coordinate] [y coordinate]");
+            else {
+                System.out.println(
+                        "Error: Command not recognized. Commands are in the form [command] [x coordinate] [y coordinate]");
                 scan.nextLine(); // Clear the scanner buffer
                 continue;
             }
@@ -162,36 +167,40 @@ public class Minesweeper{
             System.out.printf("%d out of %d cells revealed\n", revealedCells, WIDTH * LENGTH - MINES);
             System.out.printf("%d out of %d flags\n", numFlags, MINES);
 
-            if(revealedCells == WIDTH * LENGTH - MINES){
+            if (revealedCells == WIDTH * LENGTH - MINES) {
                 System.out.println("Congratulations, you won!");
                 break;
             }
         }
+        scan.close();
     }
 
     /**
-     * Initializes a 2D array of cell objects. Adds mines and sets hints appropriately.
+     * Initializes a 2D array of cell objects. Adds mines and sets hints
+     * appropriately.
+     * 
      * @param field The field to add cells to
      */
-    static public void initializeField(Cell[][] field){
+    static public void initializeField(Cell[][] field) {
         // Initialize the field with cell objects
-        for(int y = 0; y < LENGTH; y++){
-            for(int x = 0; x < WIDTH; x++) {
+        for (int y = 0; y < LENGTH; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 Cell cell = new Cell();
                 field[x][y] = cell;
             }
         }
 
         // Add mines to random cells
-        for(int i = 0; i < MINES; i++){
+        for (int i = 0; i < MINES; i++) {
             int x = 0;
             int y = 0;
 
-            // Select random pairs of coordinates until a cell at those coordinates does not contain a mine
-            do{
+            // Select random pairs of coordinates until a cell at those coordinates does not
+            // contain a mine
+            do {
                 x = (int) (Math.random() * WIDTH);
                 y = (int) (Math.random() * LENGTH);
-            } while(field[x][y].isMine());
+            } while (field[x][y].isMine());
 
             field[x][y].setMine();
 
@@ -200,68 +209,68 @@ public class Minesweeper{
     }
 
     /**
-     * Helper method for initializeField, updates the cells around a new mine to accurately represent the number of adjacent mines.
+     * Helper method for initializeField, updates the cells around a new mine to
+     * accurately represent the number of adjacent mines.
+     * 
      * @param field The minefield
-     * @param x The mine's x coordinate
-     * @param y The mine's y coordinate
+     * @param x     The mine's x coordinate
+     * @param y     The mine's y coordinate
      */
-    private static void setHints(Cell[][] field, int x, int y){
+    private static void setHints(Cell[][] field, int x, int y) {
         // Access each adjacent cell if they exist, then add one to their hint value
         // Bottom left
-        if((x - 1 >= 0) && (y - 1 >= 0)){
+        if ((x - 1 >= 0) && (y - 1 >= 0)) {
             field[x - 1][y - 1].addHint();
         }
         // Bottom middle
-        if((y - 1 >= 0)){
+        if ((y - 1 >= 0)) {
             field[x][y - 1].addHint();
         }
         // Bottom right
-        if((x + 1 < WIDTH) && (y - 1 >= 0)){
+        if ((x + 1 < WIDTH) && (y - 1 >= 0)) {
             field[x + 1][y - 1].addHint();
         }
         // Middle left
-        if((x - 1 >= 0)){
+        if ((x - 1 >= 0)) {
             field[x - 1][y].addHint();
         }
         // Middle right
-        if((x + 1 < WIDTH)){
+        if ((x + 1 < WIDTH)) {
             field[x + 1][y].addHint();
         }
         // Top left
-        if((x - 1 >= 0) && (y + 1 < LENGTH)){
+        if ((x - 1 >= 0) && (y + 1 < LENGTH)) {
             field[x - 1][y + 1].addHint();
         }
         // Top middle
-        if((y + 1 < LENGTH)){
+        if ((y + 1 < LENGTH)) {
             field[x][y + 1].addHint();
         }
         // Top right
-        if((x + 1 < WIDTH) && (y + 1 < LENGTH)){
+        if ((x + 1 < WIDTH) && (y + 1 < LENGTH)) {
             field[x + 1][y + 1].addHint();
         }
     }
 
     /**
      * Prints the current state of the minefield
+     * 
      * @param field The minefield to print
      */
-    static public void printField(Cell[][] field){
-        for(int y = 0; y < LENGTH; y++){
-            System.out.printf("%-4d" , y); // Print the current row number
-            for(int x = 0; x < WIDTH; x++){
-                if(field[x][y].isFlag() && !field[x][y].isMine() && field[x][y].isRevealed()){
-                    System.out.print("X  "); // Print an X if a cell is flagged but doesn't contain a mine (once the game is over)
-                }
-                else if(field[x][y].isFlag()){
+    static public void printField(Cell[][] field) {
+        for (int y = 0; y < LENGTH; y++) {
+            System.out.printf("%-4d", y); // Print the current row number
+            for (int x = 0; x < WIDTH; x++) {
+                if (field[x][y].isFlag() && !field[x][y].isMine() && field[x][y].isRevealed()) {
+                    System.out.print("X  "); // Print an X if a cell is flagged but doesn't contain a mine (once the
+                                             // game is over)
+                } else if (field[x][y].isFlag()) {
                     System.out.print("F  "); // Print an F if that cell is flagged
-                }
-                else if(!field[x][y].isRevealed()){
+                } else if (!field[x][y].isRevealed()) {
                     System.out.print("?  "); // Print a ? if that cell is not revealed
-                }
-                else if(field[x][y].isMine()){
+                } else if (field[x][y].isMine()) {
                     System.out.print("*  "); // Print a * if that cell is unflagged and a mine (once the game is over)
-                }
-                else{
+                } else {
                     System.out.print(field[x][y].getHint() + "  "); // Print the cell's hint value
                 }
             }
@@ -271,12 +280,14 @@ public class Minesweeper{
     }
 
     /**
-     * Sets each cell in the field to a revealed state, then prints the revealed field
+     * Sets each cell in the field to a revealed state, then prints the revealed
+     * field
+     * 
      * @param field The field of cells to reveal and print
      */
-    static public void revealField(Cell[][] field){
-        for(int y = 0; y < LENGTH; y++){
-            for(int x = 0; x < WIDTH; x++){
+    static public void revealField(Cell[][] field) {
+        for (int y = 0; y < LENGTH; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 field[x][y].revealCell();
             }
         }
@@ -285,11 +296,12 @@ public class Minesweeper{
 
     /**
      * Hides all cells, used for debugging
+     * 
      * @param field The field to hide
      */
-    static public void hideField(Cell[][] field){
-        for(int y = 0; y < LENGTH; y++){
-            for(int x = 0; x < WIDTH; x++){
+    static public void hideField(Cell[][] field) {
+        for (int y = 0; y < LENGTH; y++) {
+            for (int x = 0; x < WIDTH; x++) {
                 field[x][y].hideCell();
             }
         }
@@ -297,96 +309,98 @@ public class Minesweeper{
 
     /**
      * Reveals all cells adjacent to the given cell coordinates.
+     * 
      * @param field The minefield
-     * @param x The X coordinate of the cell
-     * @param y The Y coordinate of the cell
+     * @param x     The X coordinate of the cell
+     * @param y     The Y coordinate of the cell
      * @return The number of revealed cells
      */
-    static int revealAdjacent(Cell[][] field, int x, int y, int revealedTotal){
-        // Access each adjacent cell if they exist and are unflagged. Then reveal the cell and adjacent cells if a 0 was revealed
+    static int revealAdjacent(Cell[][] field, int x, int y, int revealedTotal) {
+        // Access each adjacent cell if they exist and are unflagged. Then reveal the
+        // cell and adjacent cells if a 0 was revealed
         // Bottom left
-        if((x - 1 >= 0) && (y - 1 >= 0) && !field[x - 1][y - 1].isFlag()){
-            if(!field[x - 1][y - 1].isRevealed()) {
+        if ((x - 1 >= 0) && (y - 1 >= 0) && !field[x - 1][y - 1].isFlag()) {
+            if (!field[x - 1][y - 1].isRevealed()) {
                 field[x - 1][y - 1].revealCell();
                 revealedTotal++;
-                if(field[x - 1][y - 1].getHint() == 0){
+                if (field[x - 1][y - 1].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x - 1, y - 1, 0);
                 }
             }
         }
 
         // Bottom middle
-        if((y - 1 >= 0) && !field[x][y - 1].isFlag()){
-            if(!field[x][y - 1].isRevealed()) {
+        if ((y - 1 >= 0) && !field[x][y - 1].isFlag()) {
+            if (!field[x][y - 1].isRevealed()) {
                 field[x][y - 1].revealCell();
                 revealedTotal++;
-                if(field[x][y - 1].getHint() == 0){
+                if (field[x][y - 1].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x, y - 1, 0);
                 }
             }
         }
 
         // Bottom right
-        if((x + 1 < WIDTH) && (y - 1 >= 0) && !field[x + 1][y - 1].isFlag()){
-            if(!field[x + 1][y - 1].isRevealed()) {
+        if ((x + 1 < WIDTH) && (y - 1 >= 0) && !field[x + 1][y - 1].isFlag()) {
+            if (!field[x + 1][y - 1].isRevealed()) {
                 field[x + 1][y - 1].revealCell();
                 revealedTotal++;
-                if(field[x + 1][y - 1].getHint() == 0){
+                if (field[x + 1][y - 1].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x + 1, y - 1, 0);
                 }
             }
         }
 
         // Middle left
-        if((x - 1 >= 0) && !field[x - 1][y].isFlag()){
-            if(!field[x - 1][y].isRevealed()) {
+        if ((x - 1 >= 0) && !field[x - 1][y].isFlag()) {
+            if (!field[x - 1][y].isRevealed()) {
                 field[x - 1][y].revealCell();
                 revealedTotal++;
-                if(field[x - 1][y].getHint() == 0){
+                if (field[x - 1][y].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x - 1, y, 0);
                 }
             }
         }
 
         // Middle right
-        if((x + 1 < WIDTH) && !field[x + 1][y].isFlag()){
-            if(!field[x + 1][y].isRevealed()) {
+        if ((x + 1 < WIDTH) && !field[x + 1][y].isFlag()) {
+            if (!field[x + 1][y].isRevealed()) {
                 field[x + 1][y].revealCell();
                 revealedTotal++;
-                if(field[x + 1][y].getHint() == 0){
+                if (field[x + 1][y].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x + 1, y, 0);
                 }
             }
         }
 
         // Top left
-        if((x - 1 >= 0) && (y + 1 < LENGTH) && !field[x - 1][y + 1].isFlag()){
-            if(!field[x - 1][y + 1].isRevealed()) {
+        if ((x - 1 >= 0) && (y + 1 < LENGTH) && !field[x - 1][y + 1].isFlag()) {
+            if (!field[x - 1][y + 1].isRevealed()) {
                 field[x - 1][y + 1].revealCell();
                 revealedTotal++;
-                if(field[x - 1][y + 1].getHint() == 0){
+                if (field[x - 1][y + 1].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x - 1, y + 1, 0);
                 }
             }
         }
 
         // Top middle
-        if((y + 1 < LENGTH) && !field[x][y + 1].isFlag()){
-            if(!field[x][y + 1].isRevealed()) {
+        if ((y + 1 < LENGTH) && !field[x][y + 1].isFlag()) {
+            if (!field[x][y + 1].isRevealed()) {
                 field[x][y + 1].revealCell();
                 revealedTotal++;
-                if(field[x][y + 1].getHint() == 0){
+                if (field[x][y + 1].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x, y + 1, 0);
                 }
             }
         }
 
         // Top right
-        if((x + 1 < WIDTH) && (y + 1 < LENGTH) && !field[x + 1][y + 1].isFlag()){
-            if(!field[x + 1][y + 1].isRevealed()) {
+        if ((x + 1 < WIDTH) && (y + 1 < LENGTH) && !field[x + 1][y + 1].isFlag()) {
+            if (!field[x + 1][y + 1].isRevealed()) {
                 field[x + 1][y + 1].revealCell();
                 revealedTotal++;
-                if(field[x + 1][y + 1].getHint() == 0){
+                if (field[x + 1][y + 1].getHint() == 0) {
                     revealedTotal += revealAdjacent(field, x + 1, y + 1, 0);
                 }
             }
