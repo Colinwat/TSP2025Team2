@@ -8,8 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 public class miniGames {
+    static JFrame frame;
 
-    private static Font loadFont(String fontPath) throws Exception {
+    public static Font loadFont(String fontPath) throws Exception {
     InputStream is = miniGames.class.getResourceAsStream(fontPath);
     Font font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(24f);
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -17,110 +18,29 @@ public class miniGames {
     return font;
 }
     public static void main(String[] args) throws Exception {
-    Font font = loadFont("/ARCADECLASSIC.ttf");
-        JFrame frame = new JFrame("Main Menu");
-        frame.getContentPane().setBackground(Color.BLACK);
-        frame.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.insets = new Insets(10, 10, 10, 10); 
-        gbc.anchor = GridBagConstraints.CENTER;  
-        JButton button1 = new JButton("Chess");
-        JButton button2 = new JButton("Rock Paper Scissors");
-        JButton button3 = new JButton("MineSweeper");
-        JButton button4 = new JButton("Tic Tac Toe");
-        JButton button5 = new JButton("Close");
-        Dimension buttonSize = new Dimension(300, 50); 
-        button1.setPreferredSize(buttonSize);
-        button2.setPreferredSize(buttonSize);
-        button3.setPreferredSize(buttonSize);
-        button4.setPreferredSize(buttonSize);
-        button5.setPreferredSize(buttonSize);
-        button1.setFont(font.deriveFont(24f));
-        button2.setFont(font.deriveFont(24f));
-        button3.setFont(font.deriveFont(24f)); 
-        button4.setFont(font.deriveFont(24f)); 
-        button5.setFont(font.deriveFont(24f));
-       JLabel choose = new JLabel("CHOOSE GAME", SwingConstants.CENTER);
-       choose.setFont(font.deriveFont(30f));
-        choose.setForeground(Color.YELLOW); 
-        gbc.gridy = 0; 
-        frame.add(choose, gbc);
-        button1.setForeground(Color.CYAN);
-        button2.setForeground(Color.CYAN);
-        button3.setForeground(Color.CYAN);
-        button4.setForeground(Color.CYAN);
-        button5.setForeground(Color.RED);
-        button1.setContentAreaFilled(false);
-        button2.setContentAreaFilled(false);
-        button3.setContentAreaFilled(false);
-        button4.setContentAreaFilled(false);
-        button5.setContentAreaFilled(false);
-        Border roundedBorder = new RoundedBorder(30);
-        button1.setBorder(roundedBorder);
-        button2.setBorder(roundedBorder);
-        button3.setBorder(roundedBorder);
-        button4.setBorder(roundedBorder);
-        button5.setBorder(roundedBorder);
-        button1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                open("Chess");
-            }
-        });
-        button2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                 open("Rock Paper Scissors");
-            }
-        });
-        button3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                 open("MineSweeper");
-            }
-        });
-        button4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                open("Tic Tac Toe");
-            }
-        });
-        button5.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        gbc.gridy = 1;
-        frame.add(button1, gbc);
-        gbc.gridy = 2;
-        frame.add(button2, gbc);
-        gbc.gridy = 3;
-        frame.add(button3, gbc);
-        gbc.gridy = 4;
-        frame.add(button4, gbc);
-        gbc.gridy = 5;
-        frame.add(button5, gbc);
-        frame.setSize(500, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);   
+        showMenu();
     }
 
      
     private static void open(String game){
-   switch (game) {
-        case "Tic Tac Toe":
-            new TicTacToe();
-            break;
-        case "Chess":
-            // Add Chess game launch here
-            break;
-        case "Rock Paper Scissors":
-            // Add RPS game launch here
-            break;
-        case "MineSweeper":
-            // Add Minesweeper game launch here
-            break;
-        default:
-            System.out.println("Game not implemented yet!");
-    }
+        switch (game) {
+            case "Tic Tac Toe":
+                new TicTacToe();
+                frame.dispose();
+                break;
+            case "Chess":
+                // Add Chess game launch here
+                break;
+            case "Rock Paper Scissors":
+                new RPS();
+                frame.dispose();
+                break;
+            case "MineSweeper":
+                // Add Minesweeper game launch here
+                break;
+            default:
+                System.out.println("Game not implemented yet!");
+        }
     }
     static class RoundedBorder implements Border {
         private int radius;
@@ -232,6 +152,58 @@ public class miniGames {
             g2d.draw(border);
             g2d.dispose();
         }
+    }
+
+    public static void showMenu() {
+        frame = new JFrame("Main Menu");
+        frame.getContentPane().setBackground(Color.BLACK);
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(10, 10, 10, 10); 
+        gbc.anchor = GridBagConstraints.CENTER;  
+    
+        try {
+            Font font = loadFont("/ARCADECLASSIC.ttf");
+    
+            JLabel choose = new JLabel("CHOOSE GAME", SwingConstants.CENTER);
+            choose.setFont(font.deriveFont(30f));
+            choose.setForeground(Color.YELLOW); 
+            gbc.gridy = 0; 
+            frame.add(choose, gbc);
+    
+            String[] gameNames = {"Chess", "Rock Paper Scissors", "MineSweeper", "Tic Tac Toe", "Close"};
+            Color[] colors = {Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN, Color.RED};
+    
+            for (int i = 0; i < gameNames.length; i++) {
+                JButton button = new JButton(gameNames[i]);
+                button.setPreferredSize(new Dimension(300, 50));
+                button.setFont(font.deriveFont(24f));
+                button.setForeground(colors[i]);
+                button.setContentAreaFilled(false);
+                button.setBorder(new RoundedBorder(30));
+    
+                final String game = gameNames[i];
+                button.addActionListener(e -> {
+                    if (game.equals("Close")) {
+                        System.exit(0);
+                    } else {
+                        open(game);
+                    }
+                });
+    
+                gbc.gridy = i + 1;
+                frame.add(button, gbc);
+            }
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        frame.setSize(500, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
 }

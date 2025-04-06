@@ -238,7 +238,7 @@ void updateScoreLabel() {
 
 void goToMenu() {
     frame.dispose(); 
-    new miniGames();
+    miniGames.showMenu();
 }
 void animatePopIn(JButton tile) {
         Timer timer = new Timer(1, new ActionListener() {
