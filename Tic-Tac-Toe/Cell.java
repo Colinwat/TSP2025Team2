@@ -66,7 +66,7 @@ public class Cell extends JButton {
             setBackground(Color.WHITE);
 
             if (mine) {
-                setText("💣");
+                setText("O");
                 setForeground(Color.RED);
             } else if (hint > 0) {
                 setText(String.valueOf(hint));
@@ -83,3 +83,4 @@ public class Cell extends JButton {
         setBackground(Color.LIGHT_GRAY);
     }
 }
+
