@@ -39,8 +39,9 @@ public class MinesweeperGUI {
         returnToMenuButton.addActionListener(e -> {
             int option = JOptionPane.showConfirmDialog(frame, "Return to main menu?", "", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
+                miniGames.showMenu();
                 frame.dispose();  // closes the game window
-                new miniGames();
+                
             }
         });
         topPanel.add(returnToMenuButton, BorderLayout.EAST);
